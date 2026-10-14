@@ -1,0 +1,28 @@
+name: Trajectory calibration tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  trajectory-tool:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements-trajectory.txt
+      - name: Install trajectory dependencies
+        run: python -m pip install -r requirements-trajectory.txt
+      - name: Run numerical and command-line tests
+        run: python -m unittest discover -s tests -v
+      - name: Run standalone demonstration
+        run: python tools/estimate_trajectory_calibration.py --demo --output outputs/trajectory/demo.json

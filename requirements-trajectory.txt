@@ -1,0 +1,2 @@
+# Minimal dependencies for the new trajectory tool and tests.
+numpy>=1.24,<3
